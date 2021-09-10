@@ -3,6 +3,11 @@
 
 .packages
 .pub/
-.idea
-.vscode
+
 build/
+.idea/.gitignore
+.idea/misc.xml
+.idea/modules.xml
+.idea/libraries/Dart_SDK.xml
+.idea/libraries/Flutter_Plugins.xml
+.idea/runConfigurations/main_dart.xml

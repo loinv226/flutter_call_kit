@@ -1,6 +1,7 @@
 #import "FlutterCallKitPlugin.h"
+//#import <AVFoundation/AVAudioSession.h>
+#import <AVFoundation/AVFoundation.h>
 
-#import <AVFoundation/AVAudioSession.h>
 
 #ifdef DEBUG
 static int const OUTGOING_CALL_WAKEUP_DELAY = 10;
@@ -76,7 +77,7 @@ static CXProvider* sharedProvider;
     NSLog(@"[FlutterCallKit][dealloc]");
 #endif
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+
     if (self.callKitProvider != nil) {
         [self.callKitProvider invalidate];
     }
@@ -135,9 +136,9 @@ static CXProvider* sharedProvider;
     // Store settings in NSUserDefault
     [[NSUserDefaults standardUserDefaults] setObject:settings forKey:@"FlutterCallKitPluginSettings"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     [FlutterCallKitPlugin initCallKitProvider];
-    
+
     self.callKitProvider = sharedProvider;
     [self.callKitProvider setDelegate:self queue:nil];
     if (_incomingCallNotification != nil) {
@@ -180,7 +181,7 @@ static CXProvider* sharedProvider;
     [startCallAction setVideo:[video boolValue]];
     [startCallAction setContactIdentifier:contactIdentifier];
     CXTransaction *transaction = [[CXTransaction alloc] initWithAction:startCallAction];
-    
+
     [self requestTransaction:transaction result:result];
 }
 
@@ -192,7 +193,7 @@ static CXProvider* sharedProvider;
     NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:uuidString];
     CXEndCallAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:uuid];
     CXTransaction *transaction = [[CXTransaction alloc] initWithAction:endCallAction];
-    
+
     [self requestTransaction:transaction result:result];
 }
 
@@ -220,7 +221,7 @@ static CXProvider* sharedProvider;
     CXSetHeldCallAction *setHeldCallAction = [[CXSetHeldCallAction alloc] initWithCallUUID:uuid onHold:[hold boolValue]];
     CXTransaction *transaction = [[CXTransaction alloc] init];
     [transaction addAction:setHeldCallAction];
-    
+
     [self requestTransaction:transaction result:result];
 }
 
@@ -298,7 +299,7 @@ static CXProvider* sharedProvider;
     CXSetMutedCallAction *setMutedAction = [[CXSetMutedCallAction alloc] initWithCallUUID:uuid muted:[muted boolValue]];
     CXTransaction *transaction = [[CXTransaction alloc] init];
     [transaction addAction:setMutedAction];
-    
+
     [self requestTransaction:transaction result:result];
 }
 
@@ -313,7 +314,7 @@ static CXProvider* sharedProvider;
     CXPlayDTMFCallAction *dtmfAction = [[CXPlayDTMFCallAction alloc] initWithCallUUID:uuid digits:key type:CXPlayDTMFCallActionTypeHardPause];
     CXTransaction *transaction = [[CXTransaction alloc] init];
     [transaction addAction:dtmfAction];
-    
+
     [self requestTransaction:transaction result:result];
 }
 
@@ -333,7 +334,7 @@ static CXProvider* sharedProvider;
             }
         } else {
             NSLog(@"[FlutterCallKitPlugin][requestTransaction] Requested transaction successfully");
-            
+
             // CXStartCallAction
             if ([[transaction.actions firstObject] isKindOfClass:[CXStartCallAction class]]) {
                 CXStartCallAction *startCallAction = [transaction.actions firstObject];
@@ -468,7 +469,7 @@ continueUserActivity:(NSUserActivity *)userActivity
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
     }
 #endif
-    
+
     if (isAudioCall) {
         INStartAudioCallIntent *startAudioCallIntent = (INStartAudioCallIntent *)interaction.intent;
         contact = [startAudioCallIntent.contacts firstObject];
@@ -476,11 +477,11 @@ continueUserActivity:(NSUserActivity *)userActivity
         INStartVideoCallIntent *startVideoCallIntent = (INStartVideoCallIntent *)interaction.intent;
         contact = [startVideoCallIntent.contacts firstObject];
     }
-    
+
     if (contact != nil) {
         handle = contact.personHandle.value;
     }
-    
+
     if (handle != nil && handle.length > 0 ){
         NSDictionary *userInfo = @{
                                    @"handle": handle,
@@ -517,7 +518,7 @@ continueUserActivity:(NSUserActivity *)userActivity
     callUpdate.supportsUngrouping = YES;
     callUpdate.hasVideo = hasVideo;
     callUpdate.localizedCallerName = localizedCallerName;
-    
+
     [FlutterCallKitPlugin initCallKitProvider];
     [sharedProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kIncomingCallNotification
@@ -634,7 +635,7 @@ continueUserActivity:(NSUserActivity *)userActivity
         AVAudioSessionInterruptionOptionKey: [NSNumber numberWithInt:AVAudioSessionInterruptionOptionShouldResume]
         };
     [[NSNotificationCenter defaultCenter] postNotificationName:AVAudioSessionInterruptionNotification object:nil userInfo:userInfo];
-    
+
     [self configureAudioSession];
     [_channel invokeMethod:kDidActivateAudioSession arguments:nil];
 }

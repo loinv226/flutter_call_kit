@@ -11,8 +11,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _configured;
-  String _currentCallId;
+
+  bool? _configured;
+  String? _currentCallId;
   FlutterCallKit _callKit = FlutterCallKit();
   @override
   void initState() {
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> {
       _currentCallId = uuid.v4();
     }
 
-    return _currentCallId;
+    return _currentCallId ?? "empty";
   }
 
   @override

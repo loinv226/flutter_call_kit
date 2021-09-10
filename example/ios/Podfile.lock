@@ -4,19 +4,19 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - flutter_call_kit (from `.symlinks/plugins/flutter_call_kit/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   flutter_call_kit:
     :path: ".symlinks/plugins/flutter_call_kit/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_call_kit: 0598f2eec54579aa00b53fb68a622ccdb08fe4fe
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_call_kit: e3458ad565c86c42d7e05992ad66d3aa05da426f
 
-PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 
-COCOAPODS: 1.7.2
+COCOAPODS: 1.10.1

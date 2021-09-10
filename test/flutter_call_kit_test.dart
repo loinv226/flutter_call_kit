@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_call_kit/flutter_call_kit.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('flutter_call_kit');
@@ -14,5 +15,9 @@ void main() {
 
   tearDown(() {
     channel.setMockMethodCallHandler(null);
+  });
+
+  test('getPlatformVersion', () async {
+    expect(await FlutterCallKit.platformVersion, '42');
   });
 }
